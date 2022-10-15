@@ -27,7 +27,7 @@ const createMovie = async (req, res, next) => {
       year,
       description,
       image,
-      trailer,
+      trailerLink,
       nameRU,
       nameEN,
       thumbnail,
@@ -39,14 +39,16 @@ const createMovie = async (req, res, next) => {
       year,
       description,
       image,
-      trailer,
+      trailerLink,
       nameRU,
       nameEN,
       thumbnail,
-      movieId: req.movie._id,
+      owner: req.user._id,
     }).save();
+    // console.log(movie);
     res.send(movie);
   } catch (e) {
+    console.log(e);
     if (e.name === 'ValidationError') {
       next(new BadRequestError(BAD_REQUEST_MSG));
       return;
@@ -58,6 +60,7 @@ const createMovie = async (req, res, next) => {
 const deleteMovie = async (req, res, next) => {
   try {
     const movieToDelete = await Movie.findById(req.params.movieId);
+    console.log(movieToDelete);
     if (!movieToDelete) {
       next(new NotFoundError(NOT_FOUND_MSG));
     } else if (movieToDelete.owner.toString() === req.user._id) {
@@ -68,6 +71,7 @@ const deleteMovie = async (req, res, next) => {
       next(new ForbiddenError(FORBIDDEN_MSG));
     }
   } catch (e) {
+    console.log(e);
     if (e.name === 'CastError') {
       next(new BadRequestError(BAD_REQUEST_MSG));
       return;

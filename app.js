@@ -18,8 +18,9 @@ const corsOptions = {
   origin: CORS_WHITELIST.split(' '),
 };
 app.use(cors(corsOptions));
+// console.log(process.env);
 
-mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/mestodb', {
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/moviedb', {
   useNewUrlParser: true,
   useUnifiedTopology: false,
 });

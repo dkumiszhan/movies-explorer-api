@@ -17,6 +17,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 const getUserInfo = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
+    console.log(user);
     res.send({ data: user });
   } catch (e) {
     next(new InternalServerError(INTERNAL_SERVER_ERROR_MSG));
@@ -49,8 +50,8 @@ const updateUserInfo = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body();
-    const user = User.findOne({ email }).select('+password');
+    const { email, password } = req.body;
+    const user = await User.findOne({ email }).select('+password');
     if (!user) {
       next(new UnauthorizedError(UNAUTHORIZED_MSG));
     } else {
@@ -69,9 +70,9 @@ const login = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   try {
-    const { email, name, password } = req.body();
-    const passwordHash = bcrypt.hash(password, 10);
-    const user = User.create({ email, name, password: passwordHash });
+    const { name, email, password } = req.body;
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = await User.create({ name, email, password: passwordHash });
     res.send(user);
   } catch (e) {
     if (e.name === 'ValidationError') {
