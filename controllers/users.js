@@ -82,7 +82,9 @@ const createUser = async (req, res, next) => {
     const { name, email, password } = req.body;
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: passwordHash });
-    res.send(user);
+    const userJson = user.toObject();
+    delete userJson.password;
+    res.send(userJson);
   } catch (e) {
     if (e.name === 'ValidationError') {
       next(new BadRequestError(BAD_REQUEST_MSG));
