@@ -12,6 +12,7 @@ const CONFLICT_MSG = 'Email занят';
 const INTERNAL_SERVER_ERROR_MSG = 'Произошла ошибка на сервере';
 const NOT_FOUND_MSG = 'Пользователь не найден';
 const UNAUTHORIZED_MSG = 'Ошибка авторизации';
+const SIGNIN_ERROR_MSG = 'Неправильная почта или пароль';
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 
 const getUserInfo = async (req, res, next) => {
@@ -61,11 +62,11 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
-      next(new UnauthorizedError(UNAUTHORIZED_MSG));
+      next(new UnauthorizedError(SIGNIN_ERROR_MSG));
     } else {
       const matched = await bcrypt.compare(password, user.password);
       if (!matched) {
-        next(new UnauthorizedError(UNAUTHORIZED_MSG));
+        next(new UnauthorizedError(SIGNIN_ERROR_MSG));
         return;
       }
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
