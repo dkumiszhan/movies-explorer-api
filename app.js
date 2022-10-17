@@ -26,8 +26,8 @@ mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/moviedb', {
 
 app.use(requestLogger);
 app.use(routes);
-app.use(errorLogger);
 app.use(notFoundHandler);
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
