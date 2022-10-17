@@ -1,12 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { login, createUser } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { userRoutes } = require('./routes/users');
-const { movieRoutes } = require('./routes/movies');
 const notFoundHandler = require('./routes/notFound');
 const errorHandler = require('./middlewares/errors/errors');
+const routes = require('./routes/index');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -25,11 +23,8 @@ mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/moviedb', {
   useUnifiedTopology: false,
 });
 
-app.post('/signup', createUser);
-app.post('/signin', login);
 app.use(requestLogger);
-app.use(userRoutes);
-app.use(movieRoutes);
+app.use(routes);
 app.use(errorLogger);
 app.use(notFoundHandler);
 app.use(errorHandler);
