@@ -11,14 +11,12 @@ const BAD_REQUEST_MSG = 'Переданы некорректные данные'
 const CONFLICT_MSG = 'Email занят';
 const INTERNAL_SERVER_ERROR_MSG = 'Произошла ошибка на сервере';
 const NOT_FOUND_MSG = 'Пользователь не найден';
-const UNAUTHORIZED_MSG = 'Ошибка авторизации';
 const SIGNIN_ERROR_MSG = 'Неправильная почта или пароль';
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 
 const getUserInfo = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
-    console.log(user);
     res.send({ data: user });
   } catch (e) {
     next(new InternalServerError(INTERNAL_SERVER_ERROR_MSG));
