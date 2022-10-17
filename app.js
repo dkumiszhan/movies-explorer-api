@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const notFoundHandler = require('./routes/notFound');
 const errorHandler = require('./middlewares/errors/errors');
@@ -27,6 +28,7 @@ app.use(requestLogger);
 app.use(routes);
 app.use(errorLogger);
 app.use(notFoundHandler);
+app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, () => {
