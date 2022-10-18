@@ -31,6 +31,7 @@ const createMovie = async (req, res, next) => {
       nameRU,
       nameEN,
       thumbnail,
+      movieId,
     } = req.body;
     const movie = await new Movie({
       country,
@@ -43,6 +44,7 @@ const createMovie = async (req, res, next) => {
       nameRU,
       nameEN,
       thumbnail,
+      movieId,
       owner: req.user._id,
     }).save();
     // console.log(movie);

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const validator = require('validator');
+const validator = require('validator');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -26,9 +26,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: function validate(v) {
-        return /^https?:\/\/(www\.)?[A-Za-z0-9._~:/?#[\]@!$&'()*+,;=-]+\.[A-Za-z0-9._~:/?#[\]@!$&'()*+,;=-]+#?$/.test(v);
-      },
+      validator: validator.isURL,
       message: (props) => `${props.value} is not a valid URL!`,
     },
   },
@@ -36,9 +34,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
-      validator: function validate(v) {
-        return /^https?:\/\/(www\.)?[A-Za-z0-9._~:/?#[\]@!$&'()*+,;=-]+\.[A-Za-z0-9._~:/?#[\]@!$&'()*+,;=-]+#?$/.test(v);
-      },
+      validator: validator.isURL,
       message: (props) => `${props.value} is not a valid URL!`,
     },
     required: false,
@@ -47,9 +43,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
-      validator: function validate(v) {
-        return /^https?:\/\/(www\.)?[A-Za-z0-9._~:/?#[\]@!$&'()*+,;=-]+\.[A-Za-z0-9._~:/?#[\]@!$&'()*+,;=-]+#?$/.test(v);
-      },
+      validator: validator.isURL,
       message: (props) => `${props.value} is not a valid URL!`,
     },
     required: false,
@@ -59,11 +53,10 @@ const movieSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   },
-  // movieId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'user',
-  //   required: true,
-  // },
+  movieId: {
+    type: Number,
+    required: true,
+  },
   nameRU: {
     type: String,
     required: true,

@@ -25,14 +25,6 @@ const getUserInfo = async (req, res, next) => {
 
 const updateUserInfo = async (req, res, next) => {
   try {
-    if (req.body.email) {
-      const existingUser = await User.findOne({ email: req.body.email });
-      if (existingUser && existingUser._id !== req.user._id) {
-        next(new ConflictError(CONFLICT_MSG));
-        return;
-      }
-    }
-
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       {
@@ -47,6 +39,10 @@ const updateUserInfo = async (req, res, next) => {
       res.send(updatedUser);
     }
   } catch (e) {
+    if (e.code === 11000) {
+      next(new ConflictError(CONFLICT_MSG));
+      return;
+    }
     if (e.name === 'ValidationError') {
       next(new BadRequestError(BAD_REQUEST_MSG));
       return;
