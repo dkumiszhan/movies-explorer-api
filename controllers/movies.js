@@ -11,7 +11,7 @@ const FORBIDDEN_MSG = 'Ошибка прав';
 
 const getMovies = async (req, res, next) => {
   try {
-    const movies = await Movie.find({}).sort('-createdAt');
+    const movies = await Movie.find({ owner: req.user._id }).sort('-createdAt');
     res.send(movies);
   } catch (e) {
     next(new InternalServerError(INTERNAL_SERVER_ERROR_MSG));
