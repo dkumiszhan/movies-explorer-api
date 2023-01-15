@@ -1,13 +1,15 @@
 const express = require('express');
+const winston = require('winston');
+const expressWinston = require('express-winston');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { errors } = require('celebrate');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { requestLogger } = require('./middlewares/logger');
 const notFoundHandler = require('./routes/notFound');
 const errorHandler = require('./middlewares/errors/errors');
 const routes = require('./routes/index');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 const app = express();
 app.use(express.json());
 
@@ -27,7 +29,13 @@ mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/moviedb', {
 app.use(requestLogger);
 app.use(routes);
 app.use(notFoundHandler);
-app.use(errorLogger);
+// app.use(errorLogger);
+app.use(expressWinston.errorLogger({
+  transports: [
+    new winston.transports.Console(),
+  ],
+  format: winston.format.simple(),
+}));
 app.use(errors());
 app.use(errorHandler);
 

@@ -15,7 +15,17 @@ const errorLogger = expressWinston.errorLogger({
   format: winston.format.json(),
 });
 
+// if (process.env.NODE_ENV !== 'production') {
+//   const errorLoggerConsole = expressWinston.errorLogger({
+//     transports: [
+//       new winston.transports.Console(),
+//     ],
+//     format: winston.format.simple(),
+//   });
+// }
+
 module.exports = {
   requestLogger,
   errorLogger,
+  // errorLoggerConsole,
 };

@@ -5,8 +5,8 @@ const { signinValidator, signupValidator } = require('../validators');
 
 const app = express();
 
-app.post('/signin', signinValidator, login);
+app.post('/sign-in', signinValidator, login);
 
-app.post('/signup', signupValidator, createUser);
+app.post('/sign-up', signupValidator, createUser);
 
 module.exports = app;
