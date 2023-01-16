@@ -53,7 +53,6 @@ const updateUserInfo = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    console.log('login here');
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
@@ -74,7 +73,6 @@ const login = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   try {
-    console.log('hello here from createUser');
     const { name, email, password } = req.body;
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: passwordHash });
@@ -82,7 +80,6 @@ const createUser = async (req, res, next) => {
     delete userJson.password;
     res.send(userJson);
   } catch (e) {
-    console.log(`sign up error ${e}`);
     if (e.name === 'ValidationError') {
       next(new BadRequestError(BAD_REQUEST_MSG));
       return;
