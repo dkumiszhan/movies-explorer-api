@@ -78,7 +78,9 @@ const createUser = async (req, res, next) => {
     const user = await User.create({ name, email, password: passwordHash });
     const userJson = user.toObject();
     delete userJson.password;
-    res.send(userJson);
+    // Add JWT token field
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+    res.send({ ...userJson, token });
   } catch (e) {
     if (e.name === 'ValidationError') {
       next(new BadRequestError(BAD_REQUEST_MSG));
